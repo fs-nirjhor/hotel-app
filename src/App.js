@@ -1,25 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import "./App.css";
+import { Routes, Route } from "react-router-dom";
+import { useState, createContext } from "react";
+import Header from "./components/Header/Header";
+import Home from "./components/Home/Home";
+import Login from "./components/Login/Login";
+import Book from "./components/Book/Book";
+import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
+import NotFound from "./components/NotFound/NotFound";
+import SnackBar from "./components/SnackBar/SnackBar";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+export const LoggedUserContext = createContext();
+const App = () => {
+  const [loggedUser, setLoggedUser] = useState({});
+return (
+  <LoggedUserContext.Provider value={[loggedUser,setLoggedUser]}>
+  <SnackBar/>
+   <Header/>  
+    <Routes >
+       <Route path="/" element={<Home/>}/>
+       <Route path="/login" element={<Login/>}/>
+       
+       <Route element={<PrivateRoute isAllowed={!!loggedUser.username}/>}>
+          <Route path="/book" element={<Book/>}/>
+          <Route path="/book/:bedType" element={<Book/>}/>
+       </Route>
+       <Route path="*" element={<NotFound />}/>
+       
+    </Routes>
+  </LoggedUserContext.Provider>
+);
+};
 
 export default App;
