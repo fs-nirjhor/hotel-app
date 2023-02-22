@@ -75,6 +75,7 @@ export default function Login() {
     signInWithPopup(auth, GoogleProvider)
       .then((result) => {
         updateLoggedUser(result.user);
+        console.log(loggedUser);
       })
       .catch((error) => handleMessage(error.code, "error"));
   };
